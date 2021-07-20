@@ -33,12 +33,14 @@ module.exports = {
           position: 'left',
           label: 'Docs',
         },
-        {to: '/blog', label: 'Updates', position: 'left'},
+        {to: '/blog', label: 'Roadmap', position: 'left'},
+        {to: '/blog', label: 'Blog', position: 'left'},
         {
-          href: 'https://github.com/facebook/docusaurus',
+          href: 'https://github.com/0xessential',
           label: 'GitHub',
           position: 'right',
         },
+        {href: 'https://wrasslers.com', label: 'Demo', position: 'right'},
       ],
     },
     footer: {
@@ -75,7 +77,7 @@ module.exports = {
             },
             {
               label: 'GitHub',
-              href: 'https://github.com/facebook/docusaurus',
+              href: 'https://github.com/0xEssential',
             },
           ],
         },
@@ -85,6 +87,7 @@ module.exports = {
     prism: {
       theme: lightCodeTheme,
       darkTheme: darkCodeTheme,
+      additionalLanguages: ['solidity']
     },
   },
   presets: [

@@ -8,7 +8,7 @@ sidebar_position: 2
 
 The `IWrassleable` standard is under development and we're seeking community input! Please contribute to our RFC if you have strong feelings about the standard, required functions for calling and receiving calls from the Wrassling Arena contract and our approach to roles and permissions.
 
-https://github.com/OpenZeppelin/openzeppelin-contracts/issues/2769
+https://github.com/0xEssential/metaverse-wrassling-federation/issues/1
 :::
 
 The `IWrassleable` interface is the open-source standard that allows access to the Wrassling Arena. Your contract must implement the required functions from this interface in order to create compliant tokens. You will also need to import the `IWrasslingArena` interface in order to call the arena contract.
@@ -20,23 +20,27 @@ The `IWrassleable` interface is the open-source standard that allows access to t
 Wrassler attributes are defined using the `IWrassleable.Wrassler` struct:
 
 ```solidity
+interface IWrassleable {
+    enum WrasslerArchetype { Face, Heel } 
+
     struct Wrassler {
-        bytes id;
         address wrassleableContract;
         uint256 tokenId;
         string name;
         string bio;
-        uint256 attack;
-        uint256 defense;
-        uint256 strength;
-        uint256 agility;
-        uint256 creativity;
+        WrasslerArchetype archetype;
+        uint16 attack;
+        uint16 defense;
+        uint16 strength;
+        uint16 agility;
+        uint16 creativity;
     }
+}
 ```
 
 You are welcome to use the interface and write your own compliant contract from scratch, but we also provide inheritable contracts that implement the required functions alongside virtual functions to be overridden by you where necessary.
 
-The `id`, `wrassleableContract` and `tokenId` allow the Wrassling Arena to interact with your contract and should be derived from your deployment and token IDs from your minting. 
+The `wrassleableContract` and `tokenId` allow the Wrassling Arena to interact with your contract and should be derived from your deployment and token IDs from your minting. 
 
 The `name` and `bio` strings are used in the gaming layer for display purposes, and may be set by your users, generated based on traits or written by your team.
 

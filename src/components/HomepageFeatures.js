@@ -5,7 +5,7 @@ import styles from './HomepageFeatures.module.css';
 const FeatureList = [
   {
     title: 'OSS Contracts',
-    Svg: require('../../static/img/undraw_docusaurus_mountain.svg').default,
+    img: require('../../static/img/wrass-01.png').default,
     description: (
       <>
         Inherit our open-source ERC721 contracts to make your NFTs compatible with the Wrassling Arena
@@ -14,7 +14,7 @@ const FeatureList = [
   },
   {
     title: 'Multi-Chain',
-    Svg: require('../../static/img/undraw_docusaurus_tree.svg').default,
+    img: require('../../static/img/wrass-02.png').default,
     description: (
       <>
         Wrassling happens on Matic - we provide contracts and documentation for Matic-exclusive and multi-chain NFTs
@@ -23,7 +23,7 @@ const FeatureList = [
   },
   {
     title: 'Free',
-    Svg: require('../../static/img/undraw_docusaurus_react.svg').default,
+    img: require('../../static/img/wrass-03.gif').default,
     description: (
       <>
         NFT projects can join the Wrassling Arena at no cost, and our developer tools allow your team to start wrassling in hours
@@ -32,11 +32,11 @@ const FeatureList = [
   },
 ];
 
-function Feature({Svg, title, description}) {
+function Feature({img, title, description}) {
   return (
     <div className={clsx('col col--4')}>
       <div className="text--center">
-        <Svg className={styles.featureSvg} alt={title} />
+        <img className={styles.featureimg} alt={title} src={img} />
       </div>
       <div className="text--center padding-horiz--md">
         <h3>{title}</h3>
