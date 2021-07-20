@@ -4,7 +4,7 @@ const darkCodeTheme = require('prism-react-renderer/themes/dracula');
 /** @type {import('@docusaurus/types').DocusaurusConfig} */
 module.exports = {
   title: 'Metaverse Wrassling Federation',
-  tagline: 'A blockchain wrestling game open to all metaverse beings',
+  tagline: 'A blockchain wrestling game open to all NFT projects and communities',
   url: 'https://docs.wrasslers.com',
   baseUrl: '/',
   onBrokenLinks: 'throw',
@@ -12,12 +12,19 @@ module.exports = {
   favicon: 'img/favicon.ico',
   organizationName: '0xEssential',
   projectName: 'wrasslers',
+  stylesheets: [
+    "https://fonts.googleapis.com/css2?family=Barlow&display=swap",
+  ],
   themeConfig: {
+    colorMode: {
+      defaultMode: 'dark',
+      disableSwitch: true,
+    },
     navbar: {
-      title: 'Wrasslers',
+      title: '',
       logo: {
-        alt: 'My Site Logo',
-        src: 'img/logo.svg',
+        alt: 'Wrasslers logo',
+        src: 'img/logo.png',
       },
       items: [
         {
