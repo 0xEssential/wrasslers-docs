@@ -16,7 +16,7 @@ function HomepageHeader() {
         {/* <div className={styles.clouds}></div> */}
       </div>
       <div className={clsx("container", styles.hero)}>
-      <img src={require('../../static/img/logo.png').default} />
+      <img className={styles.heroImage} src={require('../../static/img/logo.png').default} />
         <p className="hero__subtitle">{siteConfig.tagline}</p>
         <div className={styles.buttons}>
           <Link
@@ -34,8 +34,8 @@ export default function Home() {
   const {siteConfig} = useDocusaurusContext();
   return (
     <Layout
-      title={`Hello from ${siteConfig.title}`}
-      description="Description will go into a meta tag in <head />">
+      title={"MWF Docs"}
+      description="The Metaverse Wrassling Federation - Open to all metaverse beings">
       <HomepageHeader />
       <main>
         <HomepageFeatures />
