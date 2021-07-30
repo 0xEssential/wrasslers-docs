@@ -49,7 +49,7 @@ module.exports = {
           title: 'Docs',
           items: [
             {
-              label: 'Tutorial',
+              label: 'Intro',
               to: '/docs/intro',
             },
           ],
@@ -57,13 +57,17 @@ module.exports = {
         {
           title: 'Community',
           items: [
+            // {
+            //   label: 'Discord',
+            //   href: 'https://discordapp.com/invite/docusaurus',
+            // },
             {
-              label: 'Discord',
-              href: 'https://discordapp.com/invite/docusaurus',
+              label: '@wrasslersgg',
+              href: 'https://twitter.com/wrasslerssgg',
             },
             {
-              label: 'Twitter',
-              href: 'https://twitter.com/docusaurus',
+              label: '@0xEssential',
+              href: 'https://twitter.com/0xessential',
             },
           ],
         },
