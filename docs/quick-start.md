@@ -28,7 +28,7 @@ We don't need to see 10k images in order to approve your project - we just want 
 
 ## 3. Attributes
 
-In order to keep gameplay fair, 0xEssential is developing a system for starting attributes for partner projects. If we allowed each project to determine their tokens' attribute points freely we fear that every partner project would make extremely strong Wrasslers, which would defeat the purpose of the game.
+In order to keep gameplay fair, 0xEssential is developing a system for starting attributes for partner projects. If we allowed each project to determine their tokens' attribute points freely we fear that every partner project would make extremely capable Wrasslers, which would defeat the purpose of the game.
 
 We will grant each partner project a number of attribute points per token in the project supply. Let's say you have 1,000 tokens in your project - we might allow you to distribute 10,000 attribute points among those tokens, or 1,000 attribute points per token. With 5 attributes, you could assign each token 200 points in each category for a flat distribution.
 
@@ -42,7 +42,7 @@ Once you've made decisions about your chain and distribution approach, know how 
 
 We aspire to remove this step, or allow community members to determine approvals, but at the outset 0xEssential will take a top-down approach to ensure a strong experience for all projects and players.
 
-We don't have an official form or anything, and hope that you will open conversation with us prior to applying for approval - we want to help! Please don't contribute significant resources in creative or engineering prior to having our approval. We may not be able to approve your project immediately based on our scaling, and we'd hate for you to take on this project before we are totally ready for you.
+We don't have an official form or anything, and hope that you will open conversation with us prior to applying for approval - we want to help! Please don't contribute significant resources in creative or engineering prior to having our approval. We may not be able to approve your project immediately based on our scaling constraints, and we'd hate for you to take on this project before we are totally ready for you.
 
 ## 5. Smart contracts
 

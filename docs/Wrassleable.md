@@ -1,8 +1,8 @@
 ---
-sidebar_position: 1
+sidebar_position: 3
 ---
 
-# IWrassleable Standard Overview
+# IWrassleable Standard
 
 :::caution Seeking Community Input
 
@@ -29,11 +29,12 @@ interface IWrassleable {
         string name;
         string bio;
         WrasslerArchetype archetype;
-        uint16 attack;
-        uint16 defense;
-        uint16 strength;
-        uint16 agility;
-        uint16 creativity;
+        uint256 aggression;
+        uint256 awareness;
+        uint256 determination;
+        uint256 power;
+        uint256 resilience;
+        uint256 speed;
     }
 }
 ```
@@ -44,7 +45,10 @@ The `wrassleableContract` and `tokenId` allow the Wrassling Arena to interact wi
 
 The `name` and `bio` strings are used in the gaming layer for display purposes, and may be set by your users, generated based on traits or written by your team.
 
-The `attack`, `defense`, `strength`, `agility` and `creativity` integers are the gameplay attributes used by the gaming contracts and are derived from the an approved JSON file you pin to IPFS prior to contract deployment.
+The `aggression`, `awareness`, `determination`, `power`, `resilience` and `speed` integers are the gameplay attributes used by the gaming contracts and are derived from the an approved JSON file you pin to IPFS prior to contract deployment.
+
+Note that we are considering expanding the standard to include more attributes. Please (see our RFC)[https://github.com/0xEssential/metaverse-wrassling-federation/issues/1
+] to learn our motivations and to provide your own input.
 
 ## Functions
 
@@ -61,4 +65,3 @@ To achieve this, your contract must implement Role Based Access Control, prefera
 First, in your constructor you will create an `ATTRIBUTE_UPGRADER_ROLE` and grant it to the Wrassling Arena address. You must then also set the Wrassling Arena as the role admin - this gives the Wrassling Arena exclusive permission to grant and revoke the `ATTRIBUTE_UPGRADER_ROLE`. When 0xEssential adds your contract to the allow-list of Wrassleable contracts, the Wrassling Arena contract will ensure that it has this role, is the role administrator, and no other addresses have this role.
 
 0xEssential takes fairness and integrity incredibly seriously. Any attempt to circumvent our rules will result in being banned from the Metaverse Wrassling Federation.
-

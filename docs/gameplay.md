@@ -25,15 +25,17 @@ This is the struct that defines a `WrasslingMove`:
 ```solidity
     struct WrasslingMove {
         string id;
-        uint8 impact;
-        uint8 attackMultiplier;
-        uint8 strengthMultiplier;
-        uint8 agilityMultiplier;
-        uint8 creativityMultiplier;
-        uint8 defenseMultiplier;
-        uint8 strengthDefenseMultiplier;
-        uint8 agilityDefenseMultiplier;
-        uint8 creativityDefenseMultiplier;
+        uint256 impact;
+        uint256 aggressionMultiplier;
+        uint256 powerMultiplier;
+        uint256 speedMultiplier;
+        uint256 resilienceMultiplier;
+        uint256 determinationMultiplier;
+        uint256 awarenessMultiplier;
+        uint256 powerDefenseMultiplier;
+        uint256 speedDefenseMultiplier;
+        uint256 resilienceDefenseMultiplier;
+        uint256 determinationDefenseMultiplier;
     }
 ```
 
@@ -41,16 +43,17 @@ Here is an example move:
 
 ```typescript
 {
-    id: 0,
-    impact: 90,
-    attackMultiplier: 7,
-    strengthMultiplier: 25,
-    agilityMultiplier: 12,
-    creativityMultiplier: 17,
-    defenseMultiplier: 6,
-    strengthDefenseMultiplier: 19,
-    agilityDefenseMultiplier: 13,
-    creativityDefenseMultiplier: 21,
+    impact: 150,
+    powerMultiplier: 25,
+    speedMultiplier: 10,
+    resilienceMultiplier: 17,
+    powerDefenseMultiplier: 19,
+    awarenessMultiplier: 12,
+    aggressionMultiplier: 9,
+    speedDefenseMultiplier: 30,
+    resilienceDefenseMultiplier: 10,
+    determinationMultiplier: 7,
+    determinationDefenseMultiplier: 7,
 }
 ```
 
