@@ -1,0 +1,272 @@
+---
+slug: how-to-reveal-nft-metadata
+title: Metador 🚩 Fair, Trustless and Decentralized Metadata Reveals
+description: A tutorial for best practices
+author: '@sammybauch'
+author_image_url: https://pbs.twimg.com/profile_images/821064116643176448/ROaqvX-h_400x400.jpg
+---
+
+## Best practices for how to reveal your NFT project metadata
+
+For builders new to the NFT space there are some aspects to creating an NFT collection that can be awfully confusing. I often hear from experienced developers dipping their toes into NFTs and one issue that confuses a lot of these builders is the relationship between a smart contract and NFT metadata that includes what the market generally thinks of as an NFT. In this guide I'll explain NFT metadata at a high level, and walk you through an approach for pinning NFT metadata to IPFS and later revealing that metadata to token owners in a fair and trustless manner.
+
+This guide is intended to help developers new to web3 understand this particular aspect of NFTs, but I hope it will be useful to less technical readers as well. I also want to point out that this is one strategy for a narrow type of NFT project with metadata. NFT innovators like Avastars, Luchadores, Forgotten Runes Wizards Cult, solSeeders and others use more advanced techniques where art is generated and stored on-chain without the need for IPFS. Some community members distrust the permanence of IPFS, but storing your metadata on IPFS is indubitably more decentralized than storing it on your own API server.
+
+TLDR: we've got a [sample repo on Github that you can clone](https://github.com/0xessential/metador)!
+
+## tokenUri and metadata
+
+Something that tends to surprise engineers new to NFTs is how indirect and referential the standards are - I've heard many engineers describe NFTs as a house of cards. They enter the space with the understanding that "an NFT is a JPG" and are then surprised to learn about the tenuous relationship between a smart contract and the actual JPG. In the vast majority of NFT projects, the art is not stored on the Ethereum blockchain - storage on-chain is far too expensive to store the data for an image.
+
+Instead, the Ethereum community developed standards for ERC721 Metadata. This standardized approach requires a function on the NFT smart contract that takes a `tokenId` and returns a URL that will return a JSON object that specifies things like the `name` or `description` for the NFT with the provided `tokenId`. For the art itself, this JSON object can include keys like `image` that have another URL value that renders the image for the token.
+
+This is a fine standard that all of the NFT marketplaces and wallets and dApps understand and utilize. So long as your smart contract implements a `tokenUri(uint256 tokenId)` function that returns a URL string that renders JSON, your NFT project will work seamlessly on platforms like OpenSea.
+
+So your task then is to architect a system where your smart contract implements this function, and you implement some other infrastructure to serve the URLs that your contract returns.
+
+## Naive approach
+
+A Web 2.0 developer at this point might recognize that they could pretty easily spin up a webapp that serves a JSON metadata endpoint, and use that endpoint in the smart contract. Your smart contract, and any dApp that consumes it, would point at your webapp API. This works fine technically! But if you're new to web3, it's important to recognize how this approach falls short of being fully decentralized. This approach fails the tests of **trust** and **permanence**.
+
+Web3 maximalists believe in a **trustless** form of capitalism - there should be transparency and openness, and no requirement to trust that an actor will act ethically. The goal is to codify exchange such that everything is predictable and understandable. In the case of NFTs and metadata, if you use your own webapp server to return the metadata JSON for your NFTs then you are asking buyers to **trust** that you treat all buyers fairly. If you use a black-box API, you introduce the possibility that you will manipulate the JSON metadata to give your friends more rare or valuable tokens. You're asking buyers to trust you to act fairly.
+
+NFT collectors also seek permanence for the NFTs they buy. Nobody wants to purchase an NFT and then a year later not be able to even access the artwork that backs it. If you run your own centralized metadata JSON API, you are creating a predicament where you must keep that API up - forever. Some things, like censorship or hit-by-a-bus problems are outside of your control. Even if you are fully committed to keeping this API up, you can't control all externalities, and you are again asking collectors to trust that even if you get bored of the project or move on to something else that you will continue to return the metadata JSON forever.
+
+These two asks of buyers are enough to turn many buyers off. This is a naive approach to NFT metadata, and you should make an effort to provide a more decentralized, trustless and permanent solution to your metadata needs.
+
+## IPFS to the rescue
+
+IPFS is a Protocol Labs project built on top of Filecoin that offers a decentralized blockchain for storing files. You might think of it as a decentralized AWS S3 - you can upload or "pin" files to this distributed service, and those assets are stored across a network of miners who then serve the files when requested. There are legitimate critiques of this service, but our goal here is to push you beyond a centralized API. Other projects like Arweave offer similar services, but IPFS is well-supported by NFT marketplaces like OpenSea.
+
+IPFS allows you to pin the metadata for your NFTs in a trustless and permanent fashion. Instead of using your own API to return NFT metadata JSON, you will pin the metadata JSON to IPFS, and use the IPFS content hash in your `tokenUri`.
+
+Let's imagine you have a collection of 5 NFTs, each with it's own `name`, `description` and `imageUrl`. Each of these NFTs will be assigned a `tokenId` integer by your smart contract. I think the best approach is to **pin a directory of JSON files under one content hash**. Your `tokenUri` function on your smart contract will return a string like `ipfs://<DIRECTORY_HASH>/<TOKEN_ID>`. So for token 420 the returned URL might look like `ipfs://bafybeicoe6oe2yoeubcpljqqec3vul4n4l7zz7adgrjegijlw3ndx34vce/420`, where the first path component is the content-addressable hash created when you pin your directory to IPFS.
+
+The easiest way to get all of this metadata pinned to IPFS is to use [NFT.storage](https://nft.storage), a project by Protocol Labs. NFT.storage makes it really easy to pin NFT metadata for a single token, but for now we have to get a little creative to use this tooling for our setup. Remember - our goal is to have all of our metadata under a single IPFS hash such that we can simplify our contract code that returns the `tokenUri`.
+
+## NFT.storage directory pinning
+
+To get started you'll need a free API key from [NFT.storage](https://nft.storage). We're going to use a ts-node script to pin our assets, so if you're comfortable with Node we suggest grabbing the `nft.storage` NPM package. Installing packages from NPM and general JS / TS programming is outside the scope of this guide.
+
+Once you've got the package installed and an API key set in your env, here's a quick function that can help you iterate over your assets and pin them all under a single IPFS hash.
+
+```typescript
+import * as fs from 'fs';
+import * as path from 'path';
+import 'dotenv/config';
+
+import { NFTStorage, File } from "nft.storage";
+
+async function main() {
+  const storage = new NFTStorage({ token: process.env.NFT_STORAGE_KEY });
+
+  const directory = [];
+
+  for (const id of Array.from(Array(5).keys())) {
+    const fileData = fs.readFileSync(path.join(__dirname, `../assets/${id + 1}.png`))
+    const imageFile = new File([fileData], `MyAsset-${id}.png`, { type: 'image/png'});
+    const image = await storage.storeBlob(imageFile);
+
+    const metadata = {
+      name: `Token ${id}`,
+      description: `Description for Token ${id}`,
+      image: `ipfs://${image}`,
+      properties: {
+        These: 'Are',
+        your: 'custom',
+        attributes: 5
+      }
+    }
+
+    directory.push(
+      new File([JSON.stringify(metadata, null, 2)], `${id}`)
+    )
+  }
+
+  return storage.storeDirectory(directory);
+}
+
+main()
+  .then((res) => {
+    console.log(res);
+    process.exit(0)
+  })
+  .catch((error) => {
+    console.error(error);
+    process.exit(1);
+  });
+
+```
+
+Let's walk through a couple important parts of this code. First, we initialize NFT.storage and set up a memoization array to hold our individual JSON files we ultimately want to pin.
+
+```typescript
+const storage = new NFTStorage({ token: process.env.NFT_STORAGE_KEY });
+const directory = [];
+```
+
+We could probably use a reducer function here, but this keeps things a little more readable and simple when dealing with async calls in a loop.
+
+We then set up a `for...of` loop which is also a bit nicer for async looping but let's try not to focus on my bad TS here and instead focus on the pinning parts.
+
+The key aspect here is that we are going to first pin the asset itself, and then use the returned hash inside of a JSON file when we pin a directory. NFT storage currently has great support for recursively pinning a file when pinning a _single_ JSON object, but when pinning a directory that same recursion isn't applied, though there is [an issue on the NFT.storage repo](https://github.com/ipfs-shipyard/nft.storage/issues/292).
+
+So first, let's open up a file from our disk and pin it to IPFS:
+
+```typescript
+const fileData = fs.readFileSync(path.join(__dirname, `../assets/${id + 1}.png`))
+const imageFile = new File([fileData], `MyAsset-${id}.png`, { type: 'image/png'});
+const image = await storage.storeBlob(imageFile);
+```
+
+This assumes your image assets are located in a folder next to the script named `assets` and they are sequentially numbered with a 1-based index. Adjust to your needs! The `image` variable is set to the IPFS content hash that points at the asset on IPFS.
+
+Then we can create our metadata JSON object. Review the [NFT.storage docs](https://ipfs-shipyard.github.io/nft.storage/client/interfaces/lib_interface.tokeninput.html) for what values should be in this object - you might also want to check out [OpenSea's documentation for how they handle JSON metadata](https://docs.opensea.io/docs/metadata-standards).
+
+```typescript
+const metadata = {
+  name: `Token ${id}`,
+  description: `Description for Token ${id}`,
+  image: `ipfs://${image}`,
+  properties: {
+    These: 'Are',
+    your: 'custom',
+    attributes: 5
+  }
+}
+```
+
+Notice that we append the `ipfs://` protocol the the hash returned by pinning the image itself. You'll also likely read the names and descriptions from something like an existing CSV or local database or something. The `properties` key in particular is the thing to pay attention to for your "rarity" attributes.
+
+We take this object and create an in-memory JSON file and append that to our memoized `directory` array. We're going to name the file without an extension such that we don't have to change our contract code to append a `.json` the URL.
+
+```typescript
+  directory.push(
+    new File([JSON.stringify(metadata, null, 2)], `${id}`)
+  )
+```
+
+Finally, we pin the whole array of JSON files to IPFS using `storeDirectory`, and log out the response in the wrapping function:
+
+```typescript
+  return storage.storeDirectory(directory);
+```
+
+The return value will be the IPFS hash that stores all of your metadata json. The metadata JSON will be available at `ipfs://<HASH>/<TokenID>` as desired.
+
+## New challenges
+
+First, we want to be able to pin and share all of our metadata before minting. This demonstrates that we are operating in the open, fairly and trustlessly. We have created a system that we cannot abuse ourselves to give our frens the rarest and most valuable tokens. If we don't pin and share the JSON metadata prior to allowing minting, we're still asking minters to trust us.
+
+But if we pin all of our metadata first, there's one new issue - it's all public! Sure you might be able to _hide_ where your metadata json lives, but security through obscurity is not the best approach. Also remember the principles of trust and fairness we want to follow. We want minters to know what the metadata looks like, generally, but we don't want them to know prior to minting which metadata is associated with which token.
+
+If you were to now open minting for your collection, your minting process becomes manipulable. A savvy minter would be able to find out what metadata is associated with the next token, before that token is minted. If our tokenUri simply returns a URL that uses the tokenId, then this is a very direct relationship between token ID and metadata. Instead we need to make this slightly less deterministic.
+
+Hashmasks popularized an approach to this challenege using an offset index. It's a clever little approach that's been used by other projects like Bored Apes. The idea is simple - we will pin and key our metadata according to token IDs. But we will then update our `tokenUri` function to use an offset which we can randomize on chain to shuffle the relationship between `tokenId` and the IPFS metadata.
+
+This tiny shift is enough to keep reveals fair and transparent. If the `indexOffset` is eventually set to `23`, then token `1` would have the `tokenUri` of `ipfs://<HASH>/24` - each token's metadata URI is shifted 23 places. Just be sure to implement wraparound behavior!
+
+## Setting your index
+
+The most decentralized and trustless way to set your offset would be to use [Chainlink VRF](https://docs.chain.link/docs/get-a-random-number/) to request a random number when you are ready to reveal your metadata.
+
+A few things to think through at the edges of this aspect are when you want to reveal metadata. You could use a timestamp, we use a block number in the reference implementation. A public function means that even if you get hit by a bus before you are able to do the reveal yourself, anyone in the world can call this function (once) to reveal the metadata. You also want to guard against an offset of `0` - that's a fine offset but will make your life more difficult when checking presence or truthiness of the offset being set.
+
+Chainlink's docs are comprehensive, so let's focus on how we will take the provided random number and use it to set our offset.
+
+```solidity
+function fulfillRandomness(bytes32 requestId, uint256 randomness) internal override {
+    require(requestId == randomnessRequestId, "Bad Request");
+    metadataIndexOffset = randomness % MAX_TOKENS;
+    if (metadataIndexOffset == 0) {
+        // in the 1 per MAX_TOKENS chance that we get a 0 modulus,
+        // we assign the index offset to 1
+        metadataIndexOffset = 1;
+    }
+}
+```
+
+The modulus call here is the key part - we need to clamp the index down to be less than the `MAX_TOKENS` count, and then we also rescue ourselves if the index is `0`.
+
+With that in place we can request a random number in our public reveal function:
+
+```solidity
+function revealMetadata() public {
+    require(block.number >= revealBlock, "Not ready for reveal");
+    require(LINK.balanceOf(address(this)) >= fee, "Not enough LINK - fill contract with faucet");
+    require(randomnessRequestId != "", "Already requested");
+    randomnessRequestId = requestRandomness(keyHash, fee);
+}
+```
+
+## tokenUri with wraparound
+
+In our reference implementation we use the OpenZeppelin `ERC721PresetMinterPauserAutoId` to keep things simple. That preset implements a virtual `tokenURI` function. We'll override it to massage the returned URL to use the token + offset index, rather than just the token ID. We make sure to wrap around `MAX_TOKENS` and ultimately call the parent implementation with the adjusted uint256.
+
+```solidity
+function tokenURI(uint256 tokenId) public view override returns (string memory) {
+    uint256 rawIndex = tokenId + metadataIndexOffset;
+    if (rawIndex > MAX_TOKENS) {
+        rawIndex = MAX_TOKENS - rawIndex;
+    }
+    return super.tokenURI(rawIndex);
+}
+```
+
+## Placeholder metadata
+
+A common approach is to show some placeholder metadata pre-reveal. To accomplish that, we can pin a single JSON object to IPFS under the same content hash. Let's revisit our script for pinning, and pin a placeholder JSON object under `ipfs://<HASH>/placeholder`.
+
+```typescript
+const directory = [];
+
+const fileData = fs.readFileSync(path.join(__dirname, `../assets/placeholder.png`))
+const imageFile = new File([fileData], `MyAsset-${id}.png`, { type: 'image/png'});
+const image = await storage.storeBlob(imageFile);
+
+const metadata = {
+  name: `Project Placeholder`,
+  description: `Not yet revealed`,
+  image: `ipfs://${image}`,
+  properties: {
+    revealed: false,
+  }
+}
+
+directory.push(
+  new File([JSON.stringify(metadata, null, 2)], 'placeholder')
+)
+
+```
+
+Then we can add a condition on the `tokenURI` function to return this placeholder pre-reveal:
+
+```solidity
+function tokenURI(uint256 tokenId) public view override returns (string memory) {
+    if (metadataIndexOffset == 0) {
+        return string(abi.encodePacked(_baseURI(), "placeholder"));
+    }
+    uint256 rawIndex = tokenId + metadataIndexOffset;
+    if (rawIndex > MAX_TOKENS) {
+        rawIndex = MAX_TOKENS - rawIndex;
+    }
+    return super.tokenURI(rawIndex);
+}
+```
+
+Now if we haven't yet revealed metadata, every token will show the same placeholder.
+
+## Wrap-up
+
+This strategy for metadata reveal is the best practice for staying fair, trustless and decentralized. You won't be accused of hooking friends up with the rarest tokens, and your launch and reveal will go smoothly. It won't work for every type of project, especially if you're generating on-chain. And you may not want to reveal all of your metadata before minting is finished, but doing so may help you sell your tokens. This approach is inexpensive and does not add significant difficulty to your build. IPFS can be swapped for Arweave if you prefer.
+
+Be sure to check out our [reference implementation on Github](https://github.com/0xessential/metador) and come ask any questions in our [#metador channel on the 0xEssential Discord server](https://discord.gg/sJbGAwBMDw), or leave a comment in the space below!
+
+<iframe
+  src="https://theconvo.space/embed/dt?url=https%3A%2F%2Fdocs.wrasslers.com%2F&threadId=metador&theme=dark"
+  allowTransparency={true}
+  width="100%"
+  style={{ border: 'none', margin: '24px 0' }}
+>
+  Comments
+</iframe>
