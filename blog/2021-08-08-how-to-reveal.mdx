@@ -196,22 +196,25 @@ With that in place we can request a random number in our public reveal function:
 function revealMetadata() public {
     require(block.number >= revealBlock, "Not ready for reveal");
     require(LINK.balanceOf(address(this)) >= fee, "Not enough LINK - fill contract with faucet");
-    require(randomnessRequestId != "", "Already requested");
+    require(randomnessRequestId == "", "Already requested");
     randomnessRequestId = requestRandomness(keyHash, fee);
+    emit RequestedRandomness(randomnessRequestId);
 }
 ```
 
 ## tokenUri with wraparound
 
-In our reference implementation we use the OpenZeppelin `ERC721PresetMinterPauserAutoId` to keep things simple. That preset implements a virtual `tokenURI` function. We'll override it to massage the returned URL to use the token + offset index, rather than just the token ID. We make sure to wrap around `MAX_TOKENS` and ultimately call the parent implementation with the adjusted uint256.
+In our reference implementation we use the OpenZeppelin `ERC721PresetMinterPauserAutoId` to keep things simple. That preset implements a virtual `tokenURI` function. We'll override it to massage the returned URL to use the token + offset index, rather than just the token ID. We make sure to wrap around `MAX_TOKENS` and borrow the final implementation details from the OpenZeppelin implementations with our adjusted index.
 
 ```solidity
 function tokenURI(uint256 tokenId) public view override returns (string memory) {
+    require(_exists(tokenId), "ERC721Metadata: URI query for nonexistent token");
     uint256 rawIndex = tokenId + metadataIndexOffset;
     if (rawIndex > MAX_TOKENS) {
-        rawIndex = MAX_TOKENS - rawIndex;
+        rawIndex = rawIndex - MAX_TOKENS;
     }
-    return super.tokenURI(rawIndex);
+    string memory baseURI = _baseURI();
+    return bytes(baseURI).length > 0 ? string(abi.encodePacked(baseURI, Strings.toString(rawIndex))) : "";
 }
 ```
 
@@ -241,18 +244,20 @@ directory.push(
 
 ```
 
-Then we can add a condition on the `tokenURI` function to return this placeholder pre-reveal:
+Then we can add a guard condition on the `tokenURI` function to return this placeholder pre-reveal:
 
 ```solidity
 function tokenURI(uint256 tokenId) public view override returns (string memory) {
+    require(_exists(tokenId), "ERC721Metadata: URI query for nonexistent token");
     if (metadataIndexOffset == 0) {
         return string(abi.encodePacked(_baseURI(), "placeholder"));
     }
     uint256 rawIndex = tokenId + metadataIndexOffset;
     if (rawIndex > MAX_TOKENS) {
-        rawIndex = MAX_TOKENS - rawIndex;
+        rawIndex = rawIndex - MAX_TOKENS;
     }
-    return super.tokenURI(rawIndex);
+    string memory baseURI = _baseURI();
+    return bytes(baseURI).length > 0 ? string(abi.encodePacked(baseURI, Strings.toString(rawIndex))) : "";
 }
 ```
 
