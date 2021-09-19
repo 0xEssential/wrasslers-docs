@@ -1,4 +1,10 @@
-# Wrasslers Using Chainlink VRF to Help Power Provably Fair and Permissionless NFT Gaming
+---
+slug: chainlink-wrasslers
+title: Wrasslers Using Chainlink VRF to Help Power Provably Fair and Permissionless NFT Gaming
+description: Wrasslers is a new NFT gaming platform launched by 0xEssential that depends heavily on Chainlink VRF—a verifiably tamper-proof random number generator
+author: '@sammybauch'
+author_image_url: https://pbs.twimg.com/profile_images/821064116643176448/ROaqvX-h_400x400.jpg
+--- 
 
 ![alt_text](/img/cl-image1.png "Wrasslers x Chainlink")
 
