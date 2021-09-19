@@ -42,14 +42,5 @@ Learn more about Chainlink by visiting [chain.link](https://chain.link/) or read
 
 Wrasslers is the first game from 0xEssential, targeting a Q1 2022 beta release. Interested partners should join the 0xEssential discord community.
 
-Wrasslers | 0xEssential | Discord | Github |Twitter
-
-[https://wrasslers.com](https://wrasslers.com)
-
-[https://0xessential.com](https://0xessential.com)
-
-[https://discord.gg/QUGjy6U7S3](https://discord.gg/QUGjy6U7S3)
-
-[https://github.com/0xessential](https://github.com/0xessential)
-
-[https://twitter.com/wrasslersgg](https://twitter.com/wrasslersgg)
+[Wrasslers](https://wrasslers.com) | [0xEssential](https://0xessential.com)
+ | [Discord](https://discord.gg/QUGjy6U7S3) | [Github](https://github.com/0xessential) | [Twitter](https://twitter.com/wrasslersgg)
