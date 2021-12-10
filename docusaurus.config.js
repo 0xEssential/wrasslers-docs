@@ -4,7 +4,7 @@ const darkCodeTheme = require('prism-react-renderer/themes/dracula');
 /** @type {import('@docusaurus/types').DocusaurusConfig} */
 module.exports = {
   title: 'Metaverse Wrassling Federation',
-  tagline: 'A blockchain wrestling game open to all NFT projects and communities',
+  tagline: 'Wrestle NFT avatars in an open gaming protocol',
   url: 'https://docs.wrasslers.com',
   baseUrl: '/',
   onBrokenLinks: 'throw',
