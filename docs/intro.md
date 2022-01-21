@@ -1,63 +1,46 @@
 ---
 sidebar_position: 1
+title: "Let's Wrassle"
+
 ---
 
-# Let's Wrassle
+## Intro
 
-Welcome to the Metaverse Wrassling Federation! Wrassling is a new form of wrestling, open to any and all metaverse beings. Wrassling is the flagship game and smart contract NFT standard from 0xEssential.
+Wrasslers is an open NFT gaming protocol for **_Wrassleability_**. NFT developers can register their projects to give their tokens wrestling skills - six integer-based attributes that describe a wrestler's skill tree, stored on-chain and indexed in a subgraph.
 
-The Wrassling Arena is and permissionless gaming platform built on top of open-source standards for NFT smart contracts. 0xEssential helps NFT creators easily add utility to their tokens - in a few hours, smart contract developers can inherit our standards and immediately offer their community entry into an exciting gaming platform. NFT projects can join the Wrassling Arena for free, but gameplay does require paying for transactions, and 0xEssential aims to make Wrassling a play-to-earn game with our own ERC20 token.
+These attributes can be used to build gaming experiences. Wrasslers offers two game modes to start, a single player vs. blockchain CPU experience and an auto-battler tournament game, both built on Polygon.
 
-## Prerequisites
+The Wrasslers protocol uses a utility token $WRASSXP for upgrading Wrassler skills. $WRASSXP has an unlimited variable supply and Wrasslers reserves the right to mint or burn $WRASSXP to maintain a healthy skill-upgrading and game achievement ecosystem. NFT projects and owners receive $WRASSXP for registering. Game developers may apply for grants from the Wrasslers treasury to offer $WRASSXP for achievements in their games. Wrasslers' single player game mode rewards players with $WRASSXP for winning matches. 
 
-The Wrassling Arena is an on-chain gaming platform on Polygon's Matic chain. In order to participate in the Wrassling platform, a project's NFTs must exist on the Matic chain as spec-compliant ERC721 tokens that implement the `IWrassleable` interface standard.
+The Wrasslers protocol is primarily available on Polygon. An Ethereum mainnet contract is available to pass NFT ownership data to the Polygon mirror. NFT owners may also index the Polygon attribute state on L1, but the most recent attribute data is available on Polygon.
 
-0xEssential provides open source code and tutorials for both existing NFT communities and NFT projects that have not yet launched. There are multiple strategies for deploying an NFT project to the Matic chain - new projects can decide to deploy to Matic exclusively or with tokens that can be migrated between Ethereum mainnet and Matic, while existing projects can create derivative tokens with either of these approaches and a claim or airdrop distribution model, or implement a Matic bridge to migrate their existing tokens to Matic.
+The Polygon contract is the source for the Wrasslers subgraph, but may not have perfect ownership data. Wrasslers offers open source tools to help game developers resolve these challenges - the L1 protocol allows consumers to update Polygon ownership data as needed, while our JS SDK provides a Meta-Transaction Middleware for using fresh L1 ownership as authorization for off-chain or L2 operations.
 
-The Wrassling Arena is open to all NFT projects, but to ensure the integrity and fairness of the game mechanics and to sensibly scale the platform, it will start with 0xEssential admitting NFT projects on a case-by-case basis. Each NFT project will be awarded the same amount of Wrassler attribute points per token in collection - you are free to distribute these attribute points as you choose, where perhaps the rare tokens in your collection get more points to be stronger Wrasslers.
 
-You will primarily need smart contract development skills to make Wrassleable tokens. Depending on your approach, you will also need dApp development expertise. 0xEssential will also prioritize partners who create original art for the Wrassling platform.
+## NFT Developers
 
-### Multi-chain vs. Matic-exclusive
+NFT developers may register eligible projects in the Wrasslers protocol permissionlessly. The protocol only supports ERC721 compliant contracts that provide an `owner` function for the project developer (i.e. OpenZeppelin `Ownable`). 
 
-Whether you've already created an NFT project or are planning to deploy one, you must create NFTs on the Matic chain that implement the `IWrassleable` interface in order to join the Wrassling Arena platform.
+During registration, project owners can choose to cover the cost of using Chainlink VRF to randomize NFT starting attributes. Otherwise all tokens from the contract will start at lower base stats. Randomizing 10k tokens costs ~15 $MATIC payable by NFT project owner.
 
-In either case, the first decision you must make is whether your Wrassleable tokens will exist exclusively on the Matic chain, or as NFTs that can be migrated between Ethereum mainnet and the Matic network. The simpler approach is to deploy Matic-exclusive tokens, but we provide OSS contracts and documentation for either choice. Note that migrating a token between L1 and L2 is a complex series of on-chain transactions, and you would be responsible for building the dApp functionality to allow your token owners to perform these transactions.
+NFT developers will receive $WRASSXP for registering their project. NFT Wrassling attributes can be upgraded by spending $WRASSXP on the Wrasslers protocol. Upgrading is permissionless, so NFT projects can spend to upgrade tokens from their contract, or reward community members with $WRASSXP.
 
-Popular wallets like MetaMask and Rainbow are adding Matic as a default network, and secondary markets like OpenSea are starting to better support Matic NFTs. But particularly if you are selling your Wrassleable tokens at mint, deploying exclusively to Matic introduces a UX challenge of wrapping ETH and migrating it to the Matic network - paying to mint NFTs on Ethereum mainnet is still the gold-standard from a user perspective.
+Attributes are attached to the NFT, so when one of your owners sells a token they are also selling it's Wrasslers skill state. Wrasslers seeks positive sum outcomes, where NFT projects, collectors and game developers are more successful by working together through open standards.
 
-### Existing NFT projects
+## Game and Metaverse Developers
 
-If you already have an NFT contract deployed, the first decision you must make is whether you want to create _new_ NFTs for Wrassling, or allow your token owners to migrate your existing NFTs to Matic using the Matic PoS bridge. Unless your NFT contract is upgradeable, or you implemented the required functions for bridging tokens from Matic to Ethereum mainnet (unlikely), using the PoS bridge is an **irreversible action** - your users will effectively burn your tokens on Ethereum mainnet, and re-mint them on Matic. They can't be migrated back to Ethereum mainnet because you probably have not implemented the required functions in your original ERC721 contract.
+Wrasslers offers standards-based data for wrestling attributes useful in building games. Instead of profile pictures, Wrasslers imagines NFT avatars as metaverse beings. When a project owner registers their NFT collection with Wrasslers, it's like Neo learning Kung Fu through a disk in _The Matrix_. The NFTs a user passionately owns now have a set of skills that are available to any game that wants to use them.
 
-0xEssential instead recommends a derivative token approach - provide new, Wrassleable NFTs to your existing token owners. These new tokens can also exist exclusively on the Matic chain, or as multi-chain tokens that can be migrated between the L1 and L2 chains - with secondary marketplaces improving support for Matic, we suggest a Matic-exclusive derivative token in order to keep your project small, simple and single-chain.
+However on-chain your game is, Wrasslers provides data and tools that can help you integrate your users' NFTs. Wrasslers attributes - power, speed, aggression, determination, resilience and ring awareness - are designed to be specific to wrestling, but you're free to use these skills in any context you dream up.
 
-The Matic network uses the same public addresses for users, so an airdrop or claim functionality work well for distributing these tokens. Note that the Matic chain cannot determine the current owner of an L1 NFT, so you will need to snapshot your owners and implement on-chain claiming or perform airdrops.
+The Wrasslers treasury provides $WRASSXP grants to game developers to seed game achievement rewards pools. NFT owners upgrade their NFTs' attributes by spending $WRASSXP on the Wrasslers protocol. Game developers receive revenue share for upgrades made through their experiences and may also offer attribute upgrade incentives for gameplay - stat upgrades are permissionless, so your game is free to provide character upgrades as incentives for accomplishments or reward $WRASSXP to your players directly.
 
-### New NFT projects
+Wrasslers seeks positive sum outcomes, where NFT projects, game developers and players collaborate to build sustainable communities and experiences. Integrating avatar NFTs can bring a passionate user base and a new revenue stream to your project.
 
-If you're working on a new NFT project, 0xEssential wants to help you launch successfully by having an entertaining utility layer for your tokens from day 1. As a new project, you have the opportunity to create tokens that can be migrated back and forth between Ethereum and the Matic chain.
+## About 0xEssential
 
-Our open-source contracts make it easy to write Wrassleable NFT contracts for each chain that include the functionality to migrate the tokens back and forth. But 0xEssential does not currently provide dApp tooling to help your users accomplish this task. You'll need to support both chains in your dApp, get approval from the Polygon team for your L1 <=> L2 address mapping, and use the Matic JS SDK to build the user flows for migration.
+0xEssential builds developer tools and services to enable the open metaverse. Public ledger blockchains offer an opportunity to build games that are better for publishers and players by integrating digital assets users already own. Instead of in-game assets being locked in a single game, 0xEssential is committed to championing standards to enable interoperability between metaverse experiences.
 
-0xEssential recommends deploying Matic-exlusive tokens, but provides inheritable contracts and documentation for the multi-chain approach. Your decision should consider the tradeoffs between an easier buy + mint flow on Ethereum mainnet versus the challenges of building the functionality to support migration between L1 and L2.
+Blockchain gaming is primarily focused on ownership, earning and profit. Current blockchain games are an improvement with regard to digital assets and assigning them real world value, but this singular focus ignores the power of composability of assets that live on a public ledger.
 
-## Approval and Fairness
-
-0xEssential hopes to progressively decentralize the Wrassling Arena platform, but we will start with a top-down model to help manage scaling and gameplay integrity.
-
-In order to enter the Wrassling Arena, 0xEssential must approve your project on a case-by-case basis. Please do not deploy any mainnet contracts before you have our approval.
-
-### Approval process
-
-If you are an NFT project developer interested in joining the Wrassling Arena, please get in touch with us on Discord or Twitter! We're extremely excited to have you join the community, and will eventually accept any compliant projects, but we want to manage scale and maintain a great gameplay experience.
-
-The first projects we will allow will be the projects that contribute the most to 0xEssential's community driven standards - we want `IWrassleable` to be useful to other game developers and to be simple to implement. Please join our community Discord, engage with our RFCs, join our community calls and be a committed partner as we seek to open and decentralize the protocol. We will also consider a community's interest when choosing which projects to onboard, so we hope you'll get your token holders excited about Wrassling with their NFTs, and can commit resources to create art specifically for your Wrassleable NFTs.
-
-### Attribute fairness
-
-The `IWrassleable` standard specifies attributes for a Wrassler that are utilized in the game mechanics - `attack`, `defense`, `strength`, `agility` and `creativity`. Each of these attributes is expressed as an integer from `0` to `1000`. The attributes points are summed to determine a star rating for each Wrassler, giving players a simple way to determine their chances of victory when challenging another Wrassler. 0xEssential plans to make Wrassling a play-to-earn game, where attributes can be upgraded by spending $WRASS.
-
-In order to maintain fairness between projects, 0xEssential will allow each project to distribute a specific number of attribute points determined by their collection size. You are free to distribute these points across tokens as you see fit - perhaps the more rare tokens get more attribute points. Before your project is added to the Wrassling Arena, 0xEssential will require you to pin a JSON file on IPFS that defines the attribute distribution for your collection. We provide some testing tools to ensure your JSON file is in compliance with our rules.
-
-Once your project is approved, your contract address will be added to an allow-list mapping with the approved IPFS JSON hash. The gaming platform contracts will read from this JSON file to assign and persist Wrassling attributes. Your contract must also implement callback functions that allow the Wrassling Arena to pass Wrassler attributes for persistence in a mapping on your ERC721 contract. Your NFTs should carry these stateful attributes with them for other experiences, rather than being locked in the Wrassling Arena walled garden.
+Wrasslers is 0xEssential's test case to create an open standard for a type of metaverse actor that can be used in many game experiences.

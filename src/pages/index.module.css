@@ -10,8 +10,9 @@
   text-align: center;
   position: relative;
   overflow: hidden;
-  min-height: 600px;
+  margin: 72px 0;
   color: var(--ifm-color-primary);
+  background: transparent;
 }
 
 .hero {
@@ -20,15 +21,21 @@
 
 .heroImage {
   max-width: 60%;
+  margin-bottom: 4rem;
+}
+
+.body{
+  z-index: 10;
+  position: relative;
 }
 
 .background {
   z-index: 1;
-  position:absolute;
+  position:fixed;
   top:0;
   left:0;
   right:0;
-  bottom:-600px;
+  bottom: 0;
 }
 
 @keyframes move-twink-back {

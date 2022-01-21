@@ -9,12 +9,7 @@ import HomepageFeatures from '../components/HomepageFeatures';
 function HomepageHeader() {
   const {siteConfig} = useDocusaurusContext();
   return (
-    <header className={clsx('hero hero--primary', styles.heroBanner)}>
-      <div className={styles.background}>
-        <div className={styles.stars}></div>
-        <div className={styles.twinkling}></div>
-        {/* <div className={styles.clouds}></div> */}
-      </div>
+    <header className={clsx('hero', styles.heroBanner)}>
       <div className={clsx("container", styles.hero)}>
       <img className={styles.heroImage} src={require('../../static/img/logo.png').default} />
         <p className="hero__subtitle">{siteConfig.tagline}</p>
@@ -36,10 +31,19 @@ export default function Home() {
     <Layout
       title={"MWF Docs"}
       description="The Metaverse Wrassling Federation - Open to all metaverse beings">
-      <HomepageHeader />
-      <main>
+      
+
+      
+        <div className={styles.background}>
+          <div className={styles.stars}></div>
+          <div className={styles.twinkling}></div>
+        </div>
+        <div className={styles.body}>
+
+        <HomepageHeader />
         <HomepageFeatures />
-      </main>
+      </div>
+    
     </Layout>
   );
 }

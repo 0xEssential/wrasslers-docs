@@ -2,12 +2,23 @@
 
 .features {
   display: flex;
+  justify-content: center;
   align-items: center;
   padding: 2rem 0;
   width: 100%;
+  text-align: left;
+  z-index: 10;
 }
 
-.featureSvg {
-  height: 200px;
-  width: 200px;
+.feature {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 80%;
+  font-size: 18px;
+}
+
+.featureimg {
+  margin-bottom: 1rem;
 }

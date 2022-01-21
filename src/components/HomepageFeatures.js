@@ -4,29 +4,32 @@ import styles from './HomepageFeatures.module.css';
 
 const FeatureList = [
   {
-    title: 'OSS Contracts',
+    title: 'Permissionless Protocol',
     img: require('../../static/img/1.png').default,
     description: (
       <>
-        Inherit our open-source ERC721 contracts to make your NFTs compatible with the Wrassling Arena
+        Any NFT contract can join, any game dev can access 
+        open data for an avatar's wrestling skills.
       </>
     ),
   },
   {
-    title: 'Multi-Chain',
+    title: 'Cross-Chain Gameplay',
     img: require('../../static/img/2.png').default,
     description: (
       <>
-        Wrassling happens on Matic - we provide contracts and documentation for Matic-exclusive and multi-chain NFTs
+        Persisted on-chain and indexed, 
+        Wrasslers supports any type of metaverse experience.
       </>
     ),
   },
   {
-    title: 'Free',
+    title: 'Free+',
     img: require('../../static/img/3.png').default,
     description: (
       <>
-        NFT projects can join the Wrassling Arena at no cost, and our developer tools allow your team to start wrassling in hours
+        Revenue share for NFT projects 
+        and positive sum outcomes through open collaboration.
       </>
     ),
   },
@@ -34,13 +37,15 @@ const FeatureList = [
 
 function Feature({img, title, description}) {
   return (
-    <div className={clsx('col col--4')}>
-      <div className="text--center">
-        <img className={styles.featureimg} alt={title} src={img} />
-      </div>
-      <div className="text--center padding-horiz--md">
-        <h3>{title}</h3>
-        <p>{description}</p>
+    <div className={clsx('col col--4', styles.feature)}>
+      <div className={styles.feature}>
+        <div className="text--center">
+          <img className={styles.featureimg} alt={title} src={img} />
+        </div>
+        <div className="margin-vert--md">
+          <h2>{title}</h2>
+          <p>{description}</p>
+        </div>
       </div>
     </div>
   );
